@@ -63,6 +63,9 @@ fn main() -> Result<()> {
         }
         Commands::BuildSidebar => build_sidebar(&cli.md_dir, &cli.config),
         Commands::NewBlog { title } => rustpress::commands::new_blog(&cli.md_dir, title),
+        Commands::NewColumn { plug, title } => {
+            rustpress::commands::new_column(&cli.md_dir, plug, title)
+        }
         Commands::NewArticle { column, title } => {
             rustpress::commands::new_article(&cli.md_dir, column, title)
         }

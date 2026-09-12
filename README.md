@@ -43,7 +43,7 @@
   内置毫秒级客户端全文检索（`search.json` + Lunr.js）、RSS 订阅、Sitemap 搜索引擎收录、GitHub 原生无服务器评论与点赞系统（基于 Cloudflare Worker & GitHub API）。
 
 - 🛠️ **高效 CLI 创作工作流（CLI Workflow）**  
-  提供 `new-blog`、`new-tweet`、`new-article`、`make-catalog`、`make-cover` 等一键辅助指令，创作体验流畅自如。
+  提供 `new-blog`、`new-tweet`、`new-column`、`new-article`、`make-catalog`、`make-cover` 等一键辅助指令，创作体验流畅自如。
 
 ---
 
@@ -66,6 +66,9 @@ rustpress new-blog "我的第一篇博客"
 
 # 新建短动态闲言
 rustpress new-tweet "今天天气不错，RustPress 很好用！"
+
+# 新建系列专栏（自动创建目录、README 与高清封面）
+rustpress new-column rustpress "RustPress 实战指南"
 
 # 为专栏新建章节
 rustpress new-article rustpress "1.1.快速上手"

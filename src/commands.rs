@@ -136,7 +136,68 @@ layout: blog
     Ok(())
 }
 
-/// 2. 创建专栏/连载文章: rustpress new-article <column> [title]
+/// 2. 创建专栏目录、README 及封面: rustpress new-column <plug> [title]
+pub fn new_column(md_dir: &str, plug: &str, title: &str) -> Result<()> {
+    let source_dir = check_source_dir(md_dir)?;
+    let columns_dir = source_dir.join("columns");
+    fs::create_dir_all(&columns_dir)?;
+
+    let plug_str = plug.trim();
+    if plug_str.is_empty() {
+        eprintln!("❌ 错误: 请指定专栏目录名 (plug)！例如: rustpress new-column rustpress \"RustPress 实战指南\"");
+        exit(1);
+    }
+
+    let target_col_dir = columns_dir.join(plug_str);
+    let readme_path = target_col_dir.join("README.md");
+
+    if readme_path.exists() {
+        eprintln!("❌ 错误: 专栏 README 已存在: {}", readme_path.display());
+        exit(1);
+    }
+
+    fs::create_dir_all(&target_col_dir)?;
+    let assets_dir = target_col_dir.join("assets");
+    fs::create_dir_all(&assets_dir)?;
+
+    let clean_title = if title.trim().is_empty() {
+        plug_str
+    } else {
+        title.trim()
+    };
+
+    let now_str = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
+    let content = format!(
+        r#"---
+title: "{}"
+cover: "assets/cover.png"
+layout: columns
+description: "这是一个关于 {} 的系统性专栏。"
+tags: ['专栏']
+catalog: []
+date: "{}"
+---
+
+# {}
+
+欢迎来到《{}》专栏。
+"#,
+        clean_title, clean_title, now_str, clean_title, clean_title
+    );
+
+    fs::write(&readme_path, content)?;
+    println!("✅ 成功创建专栏目录: {}", target_col_dir.display());
+    println!("✅ 成功创建专栏 README: {}", readme_path.display());
+
+    // 自动调用 make_cover 生成专栏高清封面图片 (assets/cover.png)
+    if let Err(e) = make_cover(md_dir, Some(plug_str), false, "theme") {
+        eprintln!("⚠️ 自动生成专栏封面出现警告: {}", e);
+    }
+
+    Ok(())
+}
+
+/// 3. 创建专栏/连载文章: rustpress new-article <column> [title]
 pub fn new_article(md_dir: &str, column: &str, title: &str) -> Result<()> {
     let source_dir = check_source_dir(md_dir)?;
     let columns_dir = source_dir.join("columns");

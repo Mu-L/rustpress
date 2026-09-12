@@ -88,6 +88,17 @@ pub enum Commands {
         title: String,
     },
 
+    /// 创建新的专栏目录、README 及封面 (source/columns/<plug>)
+    #[command(alias = "new_column", alias = "new-col", alias = "new_col")]
+    NewColumn {
+        /// 专栏目录名或标识 (plug/slug，如 rustpress, 10)
+        plug: String,
+
+        /// 专栏标题 (如 "Rust 高级编程")
+        #[arg(default_value = "")]
+        title: String,
+    },
+
     /// 创建新的专栏/连载章节文章并自动同步 catalog 目录索引
     #[command(alias = "new_article", alias = "new-doc", alias = "new_doc")]
     NewArticle {
